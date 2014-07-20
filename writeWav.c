@@ -26,6 +26,9 @@ int gen_square_wave(int sample_rate, int frequency, int duration, float amplitud
 	return 0;
 }
 
+#define MAXIMUM (4*1024.0)
+#define CLAMP(x) ((x)>1?1:(x))
+
 void* malloc(size_t size)
 {
 	static void* (*real_malloc)(size_t) = NULL;
@@ -33,6 +36,6 @@ void* malloc(size_t size)
 		real_malloc = dlsym(RTLD_NEXT, "malloc");
 
 	void *p = real_malloc(size);
-	gen_square_wave(44100, size, 100, 0.2);
+	gen_square_wave(44100, 440, 100, CLAMP(size/MAXIMUM));
 	return p;
 }
